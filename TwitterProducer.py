@@ -6,9 +6,6 @@ from kafka import KafkaProducer
 import json
 import conf
 
-topic_name = "twitter_tweets"
-KAFKA_ENDPOINT = 'localhost:9092'
-
 class TwitterAuthenticator():
 
     def authenticate_twitter_app(self):
@@ -34,15 +31,17 @@ class TwitterStreamer():
 
 class TwitterListener(StreamListener):
 
-    producer = KafkaProducer(bootstrap_servers=KAFKA_ENDPOINT, acks=1,linger_ms=20)
-    # compression_type='snappy'
+    producer = KafkaProducer(bootstrap_servers=[conf.KAFKA_BOOTSRAP_SERVER], acks=1,linger_ms=20,
+                            value_serializer=lambda m: json.dumps(m).encode('utf-8'),
+                            compression_type='snappy')
 
     def on_data(self,data):
         tweet = json.loads(data)
-        if 'text' in tweet:
-            message = tweet['text'].encode("utf-8").rstrip()
-        self.producer.send(topic_name, message)
-        print(message)
+        # if 'text' in tweet:
+        #     message = tweet['text'].encode("utf-8").rstrip()
+        self.producer.send("twitter_tweets", tweet)
+        print('sending tweet to kafka..')
+        print(tweet)
 
     def on_status(self, status):
         print(status.text)

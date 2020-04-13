@@ -4,7 +4,10 @@ A simple demo using Twitter Streaming API to send messages to Kafka and process 
 ## Installation and Configuration
 This project uses Tweepy library to get tweets from twitter, and Kafka to stream data into Bonsai Elasticsearch. 
 
-#### Python libraries:
+#### Python libraries required:
+* tweepy
+* kafka-python
+* elasticsearch
 ```
 conda install -c conda-forge tweepy  /  pip install tweepy
 ```
@@ -24,7 +27,4 @@ If you do not wish to install Elasticsearch on your local machine, you may regis
 Paste all the access token and secret key to conf.py
 
 ### Running
-After installing all the neccessary libraries, run the script to start streaming
-```
-python main.py
-```
+After installing all the neccessary libraries, run the separate script to start producing and consuming!
